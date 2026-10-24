@@ -1,3 +1,4 @@
+let source = null;
 document.getElementById("audio").addEventListener("change", (event) => {
         const file = event.target.files[0];
 
@@ -15,10 +16,11 @@ document.getElementById("audio").addEventListener("change", (event) => {
             
         reader.readAsArrayBuffer(file);
     }); 
-
 function visualise(audioBuffer, audioContext) {
    
-
+    if (source) {
+        source.stop();
+    }
     const canvas = document.getElementById("canvas");
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
@@ -29,7 +31,7 @@ function visualise(audioBuffer, audioContext) {
     const frequencyBufferLength = analyser.frequencyBinCount;
     const frequencyData = new Uint8Array(frequencyBufferLength);
  
-    const source = audioContext.createBufferSource();
+    source = audioContext.createBufferSource();
     source.buffer = audioBuffer;
     source.connect(analyser);
     analyser.connect(audioContext.destination);
